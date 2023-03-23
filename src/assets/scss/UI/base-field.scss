@@ -1,0 +1,50 @@
+.base-field {
+  &__row {
+    position: relative;
+  }
+
+  &__input {
+    display: block;
+    width: 100%;
+    padding: 10px 15px;
+    padding-right: 100px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;
+    background: #ffffff;
+    border: 1px solid #a2a3a4;
+  }
+
+  &__action {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 100%;
+    padding: 1px 1px 1px 0;
+  }
+}
+.action-base-field {
+  &__button {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 14px;
+    border: none;
+    border-left: 1px solid #a2a3a4;
+    background: #00a3ff;
+    transition: all 0.3s ease 0s;
+
+    &:hover {
+      background: darken($color: #00a3ff, $amount: 10);
+
+      .action-base-field__icon {
+        transform: scale(105%);
+      }
+    }
+  }
+
+  &__icon {
+  }
+}

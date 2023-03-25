@@ -1,5 +1,5 @@
 <template>
-  <div class='base-field v-input-write'>
+  <div class='base-field v-input-comment'>
     <div class="base-field__row" :style="writingProcess ? 'z-index: 10' : 'z-index: 0'">
       <textarea class="base-field__input"
         type="text"
@@ -16,8 +16,8 @@
             src="@/assets/img/pencil.svg"
             alt="pencil"
             @click="focusToTextArea">
-          <span class="v-input-write__button-inner"
-            v-else>Ok</span>
+          <span class="v-input-comment__button-inner"
+            v-else>ok</span>
         </button>
       </div>
     </div>
@@ -37,7 +37,7 @@ export default {
     },
     comment: {
       type: String,
-      required: false
+      required: true
     }
   },
 
@@ -77,7 +77,7 @@ export default {
 </script>
 
 <style lang='scss'>
-.v-input-write {
+.v-input-comment {
   position: relative;
   height: 54px;
 

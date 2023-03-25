@@ -1,11 +1,14 @@
 <template>
-  <select class='v-select' :value="modelValue" @change="changeOption">
-    <option v-for="option in options"
-      :key="option.value"
-      :value="option.value">
-      {{ option.name }}
-    </option>
-  </select>
+  <div class="v-select">
+    <select name="countCards" :value="modelValue" @change="changeOption">
+      <option v-for="(option, index) in options"
+        :key="option.value"
+        :selected="index === 0"
+        :value="option">
+        {{ option }}
+      </option>
+    </select>
+  </div>
 </template>
 
 <script>
@@ -14,6 +17,7 @@ export default {
   props: {
     modelValue: {
       type: Number,
+      default: () => 10
     },
     options: {
       type: Array,
@@ -22,7 +26,9 @@ export default {
   },
   methods: {
     changeOption(e) {
-      this.$emit('update:modelValue', e.target.value)
+      let option = e.target.value
+      this.$emit('update:modelValue', option)
+      this.$emit('on-change-option', option)
     }
   }
 }
@@ -30,7 +36,31 @@ export default {
 
 
 <style lang='scss'>
-.v-select{
-  color: #000;
+.v-select {
+  select {
+    position: relative;
+    width: 71px;
+    padding: 8px 5px;
+    background: #FFFFFF;
+    border: 1px solid #A2A3A4;
+    border-radius: 3px;
+    font-size: 16px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+}
+
+.v-select:after {
+  content: "▼";
+  font-size: 24px;
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  z-index: 1;
+  pointer-events: none;
+  box-sizing: border-box;
+  transform: translateY(-50%);
+  color: #C4C4C4;
 }
 </style>

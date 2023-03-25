@@ -58,13 +58,14 @@ export default {
     ...mapActions('cardItems', {
       getCards: 'getCardItems'
     }),
-    sendQuery() {
+    async sendQuery() {
       const queryData = {
         queryText: this.queryText,
         limit: this.limit,
         page: this.page
       }
-      this.getCards(queryData);
+      await this.getCards(queryData);
+      this.$emit('gotCards')
     }
   }
 }

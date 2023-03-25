@@ -1,8 +1,7 @@
 <template>
   <a class='v-card-item' :href="htmlUrl" target="_blank">
     {{ projectId }}
-    <h3 class="v-card-item__title"> {{
-      projectName }}</h3>
+    <h3 class="v-card-item__title">{{ projectName }}</h3>
     <div class="v-card-item__info info-card-item">
       <div class="info-card-item__top top-card-info">
         <img class="top-card-info__image"
@@ -23,9 +22,9 @@
       </div>
     </div>
     <div class="v-card-item__input" @click.prevent>
-      <VInputWrite
+      <VInputComment
         placeholder="Комментарий к проекту"
-        name="coment"
+        name="comment"
         :comment="comment"
         @on-save-comment="onSaveComment" />
     </div>
@@ -33,7 +32,7 @@
 </template>
 
 <script>
-import VInputWrite from './UI/VInputWrite.vue';
+import VInputComment from './UI/VInputComment.vue';
 import { mapActions } from 'vuex';
 import { mapGetters } from 'vuex';
 
@@ -70,7 +69,7 @@ export default {
     }
   },
   components: {
-    VInputWrite
+    VInputComment
   },
   data() {
     return {
@@ -88,15 +87,17 @@ export default {
       initComment: 'init'
     }),
     onSaveComment(commentText) {
+      this.comment = commentText
+
       const commentData = {
         commentText,
         projectId: this.projectId,
         projectName: this.projectName
       }
       this.saveCommentData(commentData)
-      this.displayComment()
     },
     displayComment() {
+      this.comment = ''
       this.initComment()
       this.commentsAll.forEach(comment => {
         if (comment.projectId === this.projectId) {
@@ -105,9 +106,6 @@ export default {
       })
     }
   },
-  mounted() {
-    this.displayComment()
-  }
 }
 </script>
 

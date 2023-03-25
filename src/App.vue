@@ -4,18 +4,21 @@
       <div class="container">
         <div class="header__search">
           <VInputSearch
+            ref="inputSearch"
             name="search"
             placeholder="Начните вводить текст для поиска (не менее трех символов)"
             :limit="limit"
-            :page="page" />
+            :page="page"
+            @gotCards="gotCardsApp" />
         </div>
       </div>
     </header>
     <main class="main">
       <div class="container">
-        <ul class="main__cards cards-main">
+        <ul class="main__cards cards-main" v-if="items.length">
           <li class="cards-main__item" v-for="item in items">
             <VCardItem
+              ref="cardItem"
               :author="item.owner.login"
               :projectName="item.name"
               :projectId="item.id"
@@ -25,15 +28,23 @@
               :avatarUrl="item.owner.avatar_url" />
           </li>
         </ul>
+        <p v-else-if="loading" class="main__preloader">Поиск проектов...</p>
+        <p v-else class="main__preloader">Список проектов пуст</p>
       </div>
     </main>
     <footer class="footer">
       <div class="container">
-        <div class="footer__row">
-          <div class="footer__select">
-          </div>
-          <div class="footer__pagination">
-            <VPagination :pages="3" />
+        <div class="footer__body">
+          <div class="footer__row">
+            <div class="footer__select">
+              <VSelect :options="options" @on-change-option="onChangeOption" />
+            </div>
+            <div class="footer__pagination">
+              <VPagination
+                @on-change-page="onChangePage"
+                :pages="totalPages"
+                :currentPage="page" />
+            </div>
           </div>
         </div>
       </div>
@@ -61,15 +72,33 @@ export default {
       query: '',
       page: 1,
       limit: 10,
-      options: [10, 25, 50]
+      options: [10, 25, 50],
     }
   },
   computed: {
     ...mapGetters('cardItems', {
-      items: 'cardItems'
-    })
+      items: 'cardItems',
+      totalCountItems: 'totalCount',
+      loading: 'stateLoading'
+    }),
+    totalPages() {
+      const total = Math.ceil(this.totalCountItems / this.limit);
+      return (total > 6 ? 6 : total)
+    }
   },
   methods: {
+    gotCardsApp() {
+      this.$refs.cardItem.forEach(card => {
+        card.displayComment()
+      })
+    },
+    onChangeOption(option) {
+      this.limit = Number(option)
+    },
+    onChangePage(page) {
+      this.page = page
+      this.$refs.inputSearch.sendQuery()
+    }
   }
 }
 </script>
@@ -108,17 +137,39 @@ export default {
       padding: 15px 5px;
     }
   }
+
+
+}
+
+.main__preloader {
+  padding: 62px;
+  font-weight: 400;
+  font-size: 28px;
+  line-height: 33px;
+  text-align: center;
 }
 
 .footer {
-  &__row {
+  &__body {
     padding: 24px 0 57px 0;
+
+  }
+
+  &__row {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  &__select {}
+  &__select {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
 
   &__pagination {}
 }
